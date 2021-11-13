@@ -1,11 +1,71 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+Class InventoryManagementApplication {
+Start();
+main();
+}
+InventoryManagementApplication --> ApplicationController
 
-autonumber
+Class ApplicationController {
+Initialize();
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+addItem();
+removeItem();
+clearItems();
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+editItem(String newDescription, String newSerialNumber, String newValue);
+editItem(String newDescription, String newValue);
+editItem(String newDescription, String newSerialNumber);
+editItem(String newValue, String newSerialNumber);
+
+
+sortAll();
+sortValue();
+sortSerialNumber();
+sortName();
+
+}
+
+Class InventoryWrapper {
+ObservableList<Item> inventoryList;
+
+addItem();
+removeItem();
+clearItems();
+
+editItem(String newDescription, String newSerialNumber, String newValue);
+editItem(String newDescription, String newValue);
+editItem(String newDescription, String newSerialNumber);
+editItem(String newValue, String newSerialNumber);
+
+
+sortAll();
+sortValue();
+sortSerialNumber();
+sortName();
+
+getObservableList();
+setObservableList();
+}
+
+ApplicationController --> InventoryWrapper
+
+Class Item {
+
+Item();
+
+editItem(String newDescription, String newSerialNumber, String newValue);
+editItem(String newDescription, String newValue);
+editItem(String newDescription, String newSerialNumber);
+editItem(String newValue, String newSerialNumber);
+}
+
+InventoryWrapper --> Item
+
+Class Validate {
+
+validateDescription();
+validateItemValue();
+validateSerialNumber();
+}
+InventoryWrapper <--> Validate
 @enduml
