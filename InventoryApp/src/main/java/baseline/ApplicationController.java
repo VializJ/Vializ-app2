@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
@@ -66,6 +67,10 @@ public class ApplicationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void selectCell(MouseEvent mouseEvent) {
 
     }
 }

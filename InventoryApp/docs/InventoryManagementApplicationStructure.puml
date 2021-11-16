@@ -52,11 +52,17 @@ ApplicationController --> InventoryWrapper
 Class Item {
 
 Item();
+String itemName;
+String itemPrice;
+String serialNumber;
 
-editItem(String newDescription, String newSerialNumber, String newValue);
-editItem(String newDescription, String newValue);
-editItem(String newDescription, String newSerialNumber);
-editItem(String newValue, String newSerialNumber);
+getItemName();
+getItemPrice();
+getItemSerialNumber();
+
+setItemName();
+setItemPrice();
+setItemSerialNumber();
 }
 
 InventoryWrapper --> Item
