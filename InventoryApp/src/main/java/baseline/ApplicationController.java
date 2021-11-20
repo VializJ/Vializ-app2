@@ -10,12 +10,12 @@ package baseline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 
+import java.io.Serial;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -31,6 +31,18 @@ public class ApplicationController implements Initializable {
     private Button DeleteButton;
 
     @FXML
+    private TableView<Item> ItemTable;
+
+    @FXML
+    private TableColumn<Item, String> NameColumn;
+
+    @FXML
+    private TableColumn<Item, String> ItemValueColumn;
+
+    @FXML
+    private TableColumn<Item, String> SerialNumberColumn;
+
+    @FXML
     private TextFlow ItemInfoTextFlow;
 
     @FXML
@@ -40,13 +52,47 @@ public class ApplicationController implements Initializable {
     private TextField ItemNameTextField;
 
     @FXML
+    private TextField ItemValueTextField;
+
+    @FXML
+    private TextField ItemSerialNumberTextField;
+
+    @FXML
     private Button SearchButton;
 
     @FXML
     private TextField SearchTextField;
 
     @FXML
+    private Label errorLabel;
+
+    @FXML
     void addItemToInventory(ActionEvent event) {
+         NameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemName"));
+         ItemValueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemPrice"));
+         SerialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("ItemSerialNumber"));
+
+         String nameText = ItemNameTextField.getText();
+         String itemValue = ItemValueTextField.getText();
+         String serialNumber = ItemSerialNumberTextField.getText();
+
+        errorLabel = Validate.validateItemName(nameText, errorLabel);
+        if (!errorLabel.getText().isEmpty()) {
+            return;
+        }
+
+        errorLabel = Validate.validateItemValue(itemValue, errorLabel);
+        if (!errorLabel.getText().isEmpty()) {
+            return;
+        }
+
+        errorLabel = Validate.validateItemSerialNumber(InventoryWrapper.getObservableList(), serialNumber, errorLabel);
+        if (!errorLabel.getText().isEmpty()) {
+            return;
+        }
+
+        Item cell = InventoryWrapper.addItemToList(nameText, itemValue, serialNumber);
+        ItemTable.getItems().add(cell);
 
     }
 

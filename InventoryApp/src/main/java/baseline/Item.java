@@ -8,14 +8,14 @@
 package baseline;
 
 public class Item {
-    String itemName;
-    String serialNumber;
-    String itemPrice;
+    private String itemName;
+    private String itemPrice;
+    private String itemSerialNumber;
 
-    public Item (String itemName, String itemPrice, String serialNumber) {
+    public Item (String itemName, String itemPrice, String itemSerialNumber) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
-        this.serialNumber = serialNumber;
+        this.itemSerialNumber = itemSerialNumber;
     }
 
     public void setItemName(String newItemName) {
@@ -24,7 +24,7 @@ public class Item {
     public void setItemPrice(String newItemPrice) {
         //manually set the new price
     }
-    public void setSerialNumber(String newSerialNumber) {
+    public void setItemSerialNumber(String newItemSerialNumber) {
         //manually set the new serial number
     }
     public String getItemName() {
@@ -33,8 +33,8 @@ public class Item {
     public String getItemPrice() {
         return this.itemPrice;
     }
-    public String getSerialNumber() {
-        return this.serialNumber;
+    public String getItemSerialNumber() {
+        return this.itemSerialNumber;
     }
 
 }

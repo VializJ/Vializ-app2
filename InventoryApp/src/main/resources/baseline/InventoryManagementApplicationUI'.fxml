@@ -61,16 +61,21 @@
          <children>
             <Button fx:id="AddButton" mnemonicParsing="false" onAction="#addItemToInventory" prefHeight="25.0" prefWidth="94.0" text="Add" />
             <TextField fx:id="ItemNameTextField" promptText="Item Name" />
-            <TextField promptText="Item Serial Number" />
-            <TextField promptText="Item Value" />
+            <TextField fx:id="ItemValueTextField" promptText="Item Value" />
+            <TextField fx:id="ItemSerialNumberTextField" promptText="Item Serial Number" />
          </children>
       </HBox>
       <TableView fx:id="ItemTable" layoutX="14.0" layoutY="83.0" onMouseClicked="#selectCell" prefHeight="277.0" prefWidth="460.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Name" />
-          <TableColumn prefWidth="88.0" text="Item Value" />
-            <TableColumn prefWidth="296.0" text="Serial Number" />
+          <TableColumn fx:id="NameColumn" prefWidth="75.0" text="Name" />
+          <TableColumn fx:id="ItemValueColumn" prefWidth="88.0" text="Item Value" />
+            <TableColumn fx:id="SerialNumberColumn" prefWidth="296.0" text="Serial Number" />
         </columns>
       </TableView>
+      <HBox layoutX="175.0" layoutY="410.0" prefHeight="27.0" prefWidth="505.0">
+         <children>
+            <Label fx:id="errorLabel" />
+         </children>
+      </HBox>
    </children>
 </Pane>
