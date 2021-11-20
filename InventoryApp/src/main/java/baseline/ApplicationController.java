@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ApplicationController implements Initializable {
+    private Integer currItemIndex;
 
     @FXML
     private Button AddButton;
@@ -115,8 +116,18 @@ public class ApplicationController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
-
-    public void selectCell(MouseEvent mouseEvent) {
-
+    @FXML
+    void selectCell(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            //try {
+               InventoryWrapper inventoryWrapper = new InventoryWrapper();
+                currItemIndex = inventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem().getItemName());
+                //currentItemSelected.setText("Currently selected task: " + ItemTable.getSelectionModel().getSelectedItem().getItemName());
+                //update the currItemIndex with index of the currently selected cell
+//            } catch (Exception e) {
+//                currentItemSelected.setText("Currently selected task: ");
+//            }
+        }
+        
     }
 }

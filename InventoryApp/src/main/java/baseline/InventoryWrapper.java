@@ -14,14 +14,23 @@ import java.time.LocalDate;
         }
 
 
-
         public static Item addItemToList(String name, String value, String serialNumber) {
 
-                Item cell = new Item(name, value, serialNumber);
-                itemList.add(cell);
-                return cell;
+            Item cell = new Item(name, value, serialNumber);
+            itemList.add(cell);
+            return cell;
             //create new text field
             //prompt user to enter the text in field
         }
 
-}
+        public int selectListItem(String itemName) {
+            int i = 0;
+            if (itemList.get(i).equals(itemName)) {
+                currentSelectedItem = itemList.get(i);
+            }
+            return i;
+            //prompt user to select item using checkbox control
+            //return the selected list
+
+        }
+    }

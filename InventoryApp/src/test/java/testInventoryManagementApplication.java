@@ -22,10 +22,9 @@ class testInventoryManagementApplication {
     void testAddItem() {
         //create temp observable list and fill it
         //check if the lists items are there
-        String sampleSerialNumber = "A-15F-65D-447";
 
         ObservableList<Item> itemList = FXCollections.observableArrayList();
-        InventoryWrapper.addItemToList("sampleItemName", "15.00", sampleSerialNumber);
+        InventoryWrapper.addItemToList("sampleItemName", "15.00", "A-15F-65D-447");
 
         itemList = InventoryWrapper.getObservableList();
         Item sampleItem = itemList.get(0);
@@ -36,6 +35,20 @@ class testInventoryManagementApplication {
         }
         assertEquals(true, actual);
     }
+    @Test
+    void testSelectItem() {
+
+        InventoryWrapper iw = new InventoryWrapper();
+        InventoryWrapper.addItemToList("sampleItemName", "15.00", "A-15F-65D-447");
+
+        int actual = iw.selectListItem("sampleItemName");
+        assertEquals(0, actual);
+
+
+    }
+
+
+
 //    @Test
 //    void testRemoveItem() {
 //        //create temp observable list and fill it
