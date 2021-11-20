@@ -7,6 +7,7 @@
 
 package baseline;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -104,7 +105,13 @@ public class ApplicationController implements Initializable {
 
     @FXML
     void deleteItemFromInventory(ActionEvent event) {
-
+        ObservableList<Item> newList = ItemTable.getItems();
+        //Make a list to hold the table items
+        Item itemToDelete = ItemTable.getSelectionModel().getSelectedItem();
+        //find the item we want to delete
+        //newList.remove(itemToDelete);
+        InventoryWrapper.deleteItemFromList(itemToDelete);
+        InventoryWrapper.setObservableList(newList);
     }
 
     @FXML

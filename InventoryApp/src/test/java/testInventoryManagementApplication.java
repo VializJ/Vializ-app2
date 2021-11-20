@@ -6,11 +6,8 @@
 
 import baseline.InventoryWrapper;
 import baseline.Item;
-import baseline.Validate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,21 +37,36 @@ class testInventoryManagementApplication {
 
         InventoryWrapper iw = new InventoryWrapper();
         InventoryWrapper.addItemToList("sampleItemName", "15.00", "A-15F-65D-447");
-
         int actual = iw.selectListItem("sampleItemName");
         assertEquals(0, actual);
-
 
     }
 
 
 
-//    @Test
-//    void testRemoveItem() {
-//        //create temp observable list and fill it
-//        //remove the first item
-//        //check to see if the item exists
-//    }
+    @Test
+    void testRemoveItem() {
+        //create temp observable list and fill it
+        ObservableList<Item> currItemList = FXCollections.observableArrayList();
+        currItemList.add(new Item("sampleItemName01", "100.00", "A-15F-65D-447"));
+        currItemList.add(new Item("sampleItemName02", "16.42", "B-15G-69D-666"));
+        InventoryWrapper.setObservableList(currItemList);
+        Item itemToDelete = currItemList.get(1);
+        boolean actual = false;
+
+        String itemDeletedName = InventoryWrapper.deleteItemFromList(itemToDelete);
+        //remove the first item
+        //check to see if the item exists
+        currItemList = InventoryWrapper.getObservableList();
+
+        for (int i = 0; i < currItemList.size(); i++) {
+            if (!currItemList.get(i).equals(itemDeletedName)) {
+                actual = true;
+            }
+
+        }
+        assertEquals(true, actual);
+    }
 //    @Test
 //    void testEditItem() {
 //        //create temp observable list and fill it

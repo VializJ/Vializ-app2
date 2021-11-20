@@ -15,12 +15,29 @@ import java.time.LocalDate;
 
 
         public static Item addItemToList(String name, String value, String serialNumber) {
-
             Item cell = new Item(name, value, serialNumber);
             itemList.add(cell);
             return cell;
             //create new text field
             //prompt user to enter the text in field
+        }
+
+        public static String deleteItemFromList(Item itemToDelete) {
+            int i = 0;
+            String itemToDeleteName = "";
+            if (itemList.get(i).equals(itemToDelete)) {
+                //delete
+                itemToDeleteName = itemList.get(i).getItemName();
+                itemList.remove(i);
+            }else {
+                i++;
+            }
+            return itemToDeleteName;
+        }
+
+        public static void setObservableList(ObservableList<Item> newList) {
+            itemList.clear();
+            itemList = newList;
         }
 
         public int selectListItem(String itemName) {
