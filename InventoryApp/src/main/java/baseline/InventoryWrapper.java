@@ -63,7 +63,7 @@ public class InventoryWrapper {
 
             for (int i = 0; i < array.length; i++) {
                 for (int j = 0; j < itemList.size(); j++) {
-                    if (itemList.get(j).getItemName().contains(array[i])) {
+                    if (itemList.get(j).getItemName().contains(array[i]) || itemList.get(j).getItemSerialNumber().contains(array[i])) {
                         filteredInventory.add(itemList.get(j));
                     }
                 }
