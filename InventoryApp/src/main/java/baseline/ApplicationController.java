@@ -70,31 +70,86 @@ public class ApplicationController implements Initializable {
 
     @FXML
     void addItemToInventory(ActionEvent event) {
-         NameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemName"));
-         ItemValueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemPrice"));
-         SerialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("ItemSerialNumber"));
+        NameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemName"));
+        ItemValueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemPrice"));
+        SerialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("ItemSerialNumber"));
 
-         String nameText = ItemNameTextField.getText();
-         String itemValue = ItemValueTextField.getText();
-         String serialNumber = ItemSerialNumberTextField.getText();
-
-        errorLabel = Validate.validateItemName(nameText, errorLabel);
-        if (!errorLabel.getText().isEmpty()) {
+        String nameText = ItemNameTextField.getText();
+        String itemValue = ItemValueTextField.getText();
+        String serialNumber = ItemSerialNumberTextField.getText();
+//        errorLabel = Validate.validateItemName(nameText, errorLabel);
+//        if (!errorLabel.getText().isEmpty()) {
+//            return;
+//        }
+//
+//        errorLabel = Validate.validateItemValue(itemValue, errorLabel);
+//        if (!errorLabel.getText().isEmpty()) {
+//            return;
+//        }
+//
+//        errorLabel = Validate.validateItemSerialNumber(InventoryWrapper.getObservableList(), serialNumber, errorLabel);
+//        if (!errorLabel.getText().isEmpty()) {
+//            return;
+//        }
+        if (nameText.length() > 256) {
+            errorLabel.setText("Too many characters try again");
+            return;
+        }else if(nameText.length() < 2) {
+            errorLabel.setText("Too few characters try again");
             return;
         }
 
-        errorLabel = Validate.validateItemValue(itemValue, errorLabel);
-        if (!errorLabel.getText().isEmpty()) {
+        /*Validate the item value*/
+        if (itemValue.matches("\\d{2}.\\d{2}") ||
+                itemValue.matches("\\d{3}.\\d{2}") ||
+                itemValue.matches("\\d{4}.\\d{2}") ||
+                itemValue.matches("\\d{5}.\\d{2}") ||
+                itemValue.matches("\\d{6}.\\d{2}") ||
+                itemValue.matches("\\d{7}.\\d{2}") ||
+                itemValue.matches("\\d{8}.\\d{2}") ||
+                itemValue.matches("\\d{9}.\\d{2}")
+        ) {
+            errorLabel.setText("");
+        } else {
+            errorLabel.setText("Invalid item value format");
             return;
         }
 
-        errorLabel = Validate.validateItemSerialNumber(InventoryWrapper.getObservableList(), serialNumber, errorLabel);
-        if (!errorLabel.getText().isEmpty()) {
+        Double valueConverted = Double.parseDouble(itemValue);
+
+        if (valueConverted < 0) {
+            errorLabel.setText("Item must have a value greater than or equal to 0 try again");
             return;
         }
 
+        /*validate the serialnumber*/
+        if (!serialNumber.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
+            errorLabel.setText("Serial number not in correct format try again");
+            return;
+        }
+//        for (int i = 0; i < itemList.size(); i++) {
+//            if (serialNumber.equals(itemList.get(i).getItemSerialNumber())) {
+//                System.out.println(serialNumber);
+//                System.out.println(itemList.get(i).getItemSerialNumber());
+//                errorLabel.setText("Serial number already exists try again");
+//                return;
+//            }
+        for (int i = 0; i < InventoryWrapper.getObservableList().size(); i++) {
+            if (serialNumber.equals(InventoryWrapper.getObservableList().get(i).getItemSerialNumber())) {
+                System.out.println(serialNumber);
+                errorLabel.setText("Serial number already exists try again");
+                return;
+            }else {
+                continue;
+            }
+        }
         Item cell = InventoryWrapper.addItemToList(nameText, itemValue, serialNumber);
         ItemTable.getItems().add(cell);
+
+        ItemNameTextField.setText("");
+        ItemValueTextField.setText("");
+        ItemSerialNumberTextField.setText("");
+
 
     }
 
@@ -105,13 +160,14 @@ public class ApplicationController implements Initializable {
 
     @FXML
     void deleteItemFromInventory(ActionEvent event) {
-        ObservableList<Item> newList = ItemTable.getItems();
+        ObservableList<Item> newInventory = ItemTable.getItems();
         //Make a list to hold the table items
         Item itemToDelete = ItemTable.getSelectionModel().getSelectedItem();
         //find the item we want to delete
-        //newList.remove(itemToDelete);
+        newInventory.remove(itemToDelete);
+
         InventoryWrapper.deleteItemFromList(itemToDelete);
-        InventoryWrapper.setObservableList(newList);
+        ItemTable.setItems(InventoryWrapper.getObservableList());
     }
 
     @FXML
@@ -128,7 +184,7 @@ public class ApplicationController implements Initializable {
         if (event.getClickCount() == 1) {
             //try {
                InventoryWrapper inventoryWrapper = new InventoryWrapper();
-                currItemIndex = inventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem().getItemName());
+                currItemIndex = inventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem().getItemSerialNumber());
                 //currentItemSelected.setText("Currently selected task: " + ItemTable.getSelectionModel().getSelectedItem().getItemName());
                 //update the currItemIndex with index of the currently selected cell
 //            } catch (Exception e) {

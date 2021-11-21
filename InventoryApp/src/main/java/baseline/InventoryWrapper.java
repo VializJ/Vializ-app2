@@ -24,15 +24,15 @@ import java.time.LocalDate;
 
         public static String deleteItemFromList(Item itemToDelete) {
             int i = 0;
-            String itemToDeleteName = "";
+            String itemToDeleteSerialNumber = "";
             if (itemList.get(i).equals(itemToDelete)) {
                 //delete
-                itemToDeleteName = itemList.get(i).getItemName();
+                itemToDeleteSerialNumber = itemList.get(i).getItemSerialNumber();
                 itemList.remove(i);
             }else {
                 i++;
             }
-            return itemToDeleteName;
+            return itemToDeleteSerialNumber;
         }
 
         public static void setObservableList(ObservableList<Item> newList) {
@@ -49,5 +49,8 @@ import java.time.LocalDate;
             //prompt user to select item using checkbox control
             //return the selected list
 
+        }
+        public static Item getCurrentSelectedItem() {
+            return currentSelectedItem;
         }
     }

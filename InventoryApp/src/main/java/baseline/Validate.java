@@ -23,6 +23,11 @@ public static Label validateItemName(String nameToValidate, Label errorLabel) {
     return errorLabel;
     }
 public static Label validateItemValue(String valueToValidate, Label errorLabel) {
+    if (!valueToValidate.matches("\\d{2}.\\d{2}")) {
+        errorLabel.setText("Invalid item value format");
+        return errorLabel;
+    }
+
     Double valueConverted = Double.parseDouble(valueToValidate);
 
     if (valueConverted < 0) {
