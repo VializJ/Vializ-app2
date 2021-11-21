@@ -25,13 +25,6 @@
                   <MenuItem mnemonicParsing="false" text="Save as: JSON" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Edit Item Value" />
-                  <MenuItem mnemonicParsing="false" text="Edit Item Name" />
-                  <MenuItem mnemonicParsing="false" text="Edit Item Serial Number" />
-            </items>
-          </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="User Guide" />
@@ -49,6 +42,7 @@
         <buttons>
             <Button fx:id="DeleteButton" mnemonicParsing="false" onAction="#deleteItemFromInventory" text="Delete" />
             <Button fx:id="ClearButton" mnemonicParsing="false" onAction="#clearItemsFromInventory" text="Clear" />
+            <Button fx:id="RevertSearchButton" mnemonicParsing="false" onAction="#revertSearch" text="Revert Search" />
         </buttons>
       </ButtonBar>
       <VBox alignment="TOP_CENTER" layoutX="478.0" layoutY="75.0" prefHeight="294.0" prefWidth="241.0">
@@ -67,9 +61,9 @@
       </HBox>
       <TableView fx:id="ItemTable" layoutX="14.0" layoutY="83.0" onMouseClicked="#selectCell" prefHeight="277.0" prefWidth="460.0">
         <columns>
-          <TableColumn fx:id="NameColumn" prefWidth="75.0" text="Name" />
-          <TableColumn fx:id="ItemValueColumn" prefWidth="88.0" text="Item Value" />
-            <TableColumn fx:id="SerialNumberColumn" prefWidth="296.0" text="Serial Number" />
+          <TableColumn fx:id="NameColumn" onEditCommit="#editName" prefWidth="75.0" text="Name" />
+          <TableColumn fx:id="ItemValueColumn" onEditCommit="#editItemValue" prefWidth="88.0" text="Item Value" />
+            <TableColumn fx:id="SerialNumberColumn" onEditCommit="#editSerialNumber" prefWidth="296.0" text="Serial Number" />
         </columns>
       </TableView>
       <HBox layoutX="175.0" layoutY="410.0" prefHeight="27.0" prefWidth="505.0">

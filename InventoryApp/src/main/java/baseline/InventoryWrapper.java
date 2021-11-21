@@ -3,8 +3,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.DatePicker;
 import java.time.LocalDate;
+import java.util.Arrays;
 
-    public class InventoryWrapper {
+public class InventoryWrapper {
         private static ObservableList<Item> itemList = FXCollections.observableArrayList();
         private static Item currentSelectedItem;
 
@@ -55,5 +56,19 @@ import java.time.LocalDate;
         }
         public static void clearInventory() {
             itemList.clear();
+        }
+        public static ObservableList<Item> searchObservableList(String wordsToSearchFor) {
+            String[] array = wordsToSearchFor.trim().split(" ");
+            ObservableList<Item> filteredInventory = FXCollections.observableArrayList();
+
+            for (int i = 0; i < array.length; i++) {
+                for (int j = 0; j < itemList.size(); j++) {
+                    if (itemList.get(j).getItemName().contains(array[i])) {
+                        filteredInventory.add(itemList.get(j));
+                    }
+                }
+            }
+
+            return filteredInventory;
         }
     }

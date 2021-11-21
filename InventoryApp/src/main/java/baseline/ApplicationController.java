@@ -69,6 +69,10 @@ public class ApplicationController implements Initializable {
     private Label errorLabel;
 
     @FXML
+    private Button RevertSearchButton;
+
+
+    @FXML
     void addItemToInventory(ActionEvent event) {
         NameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemName"));
         ItemValueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemPrice"));
@@ -77,72 +81,72 @@ public class ApplicationController implements Initializable {
         String nameText = ItemNameTextField.getText();
         String itemValue = ItemValueTextField.getText();
         String serialNumber = ItemSerialNumberTextField.getText();
-//        errorLabel = Validate.validateItemName(nameText, errorLabel);
-//        if (!errorLabel.getText().isEmpty()) {
+
+        errorLabel.setText(Validate.validateItemName(nameText));
+        if (!errorLabel.getText().isEmpty()) {
+            return;
+        }
+        errorLabel.setText(Validate.validateItemValue(itemValue));
+        if (!errorLabel.getText().isEmpty()) {
+            return;
+        }
+        errorLabel.setText(Validate.validateItemSerialNumber(InventoryWrapper.getObservableList(), serialNumber));
+        if (!errorLabel.getText().isEmpty()) {
+            System.out.println(errorLabel.toString());
+            return;
+        }
+//        if (nameText.length() > 256) {
+//            errorLabel.setText("Too many characters try again");
+//            return;
+//        }else if(nameText.length() < 2) {
+//            errorLabel.setText("Too few characters try again");
 //            return;
 //        }
 //
-//        errorLabel = Validate.validateItemValue(itemValue, errorLabel);
-//        if (!errorLabel.getText().isEmpty()) {
+//        /*Validate the item value*/
+//        if (itemValue.matches("\\d{2}.\\d{2}") ||
+//                itemValue.matches("\\d{3}.\\d{2}") ||
+//                itemValue.matches("\\d{4}.\\d{2}") ||
+//                itemValue.matches("\\d{5}.\\d{2}") ||
+//                itemValue.matches("\\d{6}.\\d{2}") ||
+//                itemValue.matches("\\d{7}.\\d{2}") ||
+//                itemValue.matches("\\d{8}.\\d{2}") ||
+//                itemValue.matches("\\d{9}.\\d{2}")
+//        ) {
+//            errorLabel.setText("");
+//        } else {
+//            errorLabel.setText("Invalid item value format");
 //            return;
 //        }
 //
-//        errorLabel = Validate.validateItemSerialNumber(InventoryWrapper.getObservableList(), serialNumber, errorLabel);
-//        if (!errorLabel.getText().isEmpty()) {
+//        Double valueConverted = Double.parseDouble(itemValue);
+//
+//        if (valueConverted < 0) {
+//            errorLabel.setText("Item must have a value greater than or equal to 0 try again");
 //            return;
 //        }
-        if (nameText.length() > 256) {
-            errorLabel.setText("Too many characters try again");
-            return;
-        }else if(nameText.length() < 2) {
-            errorLabel.setText("Too few characters try again");
-            return;
-        }
-
-        /*Validate the item value*/
-        if (itemValue.matches("\\d{2}.\\d{2}") ||
-                itemValue.matches("\\d{3}.\\d{2}") ||
-                itemValue.matches("\\d{4}.\\d{2}") ||
-                itemValue.matches("\\d{5}.\\d{2}") ||
-                itemValue.matches("\\d{6}.\\d{2}") ||
-                itemValue.matches("\\d{7}.\\d{2}") ||
-                itemValue.matches("\\d{8}.\\d{2}") ||
-                itemValue.matches("\\d{9}.\\d{2}")
-        ) {
-            errorLabel.setText("");
-        } else {
-            errorLabel.setText("Invalid item value format");
-            return;
-        }
-
-        Double valueConverted = Double.parseDouble(itemValue);
-
-        if (valueConverted < 0) {
-            errorLabel.setText("Item must have a value greater than or equal to 0 try again");
-            return;
-        }
-
-        /*validate the serialnumber*/
-        if (!serialNumber.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
-            errorLabel.setText("Serial number not in correct format try again");
-            return;
-        }
-//        for (int i = 0; i < itemList.size(); i++) {
-//            if (serialNumber.equals(itemList.get(i).getItemSerialNumber())) {
+//
+//        /*validate the serialnumber*/
+//        if (!serialNumber.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
+//            errorLabel.setText("Serial number not in correct format try again");
+//            return;
+//        }
+////        for (int i = 0; i < itemList.size(); i++) {
+////            if (serialNumber.equals(itemList.get(i).getItemSerialNumber())) {
+////                System.out.println(serialNumber);
+////                System.out.println(itemList.get(i).getItemSerialNumber());
+////                errorLabel.setText("Serial number already exists try again");
+////                return;
+////            }
+//        for (int i = 0; i < InventoryWrapper.getObservableList().size(); i++) {
+//            if (serialNumber.equals(InventoryWrapper.getObservableList().get(i).getItemSerialNumber())) {
 //                System.out.println(serialNumber);
-//                System.out.println(itemList.get(i).getItemSerialNumber());
 //                errorLabel.setText("Serial number already exists try again");
 //                return;
+//            }else {
+//                continue;
 //            }
-        for (int i = 0; i < InventoryWrapper.getObservableList().size(); i++) {
-            if (serialNumber.equals(InventoryWrapper.getObservableList().get(i).getItemSerialNumber())) {
-                System.out.println(serialNumber);
-                errorLabel.setText("Serial number already exists try again");
-                return;
-            }else {
-                continue;
-            }
-        }
+//        }
         Item cell = InventoryWrapper.addItemToList(nameText, itemValue, serialNumber);
         ItemTable.getItems().add(cell);
 
@@ -173,12 +177,20 @@ public class ApplicationController implements Initializable {
 
     @FXML
     void searchForItem(ActionEvent event) {
+        ItemTable.getItems().clear();
+        ItemTable.getItems().addAll(InventoryWrapper.searchObservableList(SearchTextField.getText()));
+        SearchTextField.clear();
+    }
 
+    @FXML
+    void revertSearch(ActionEvent event) {
+        ItemTable.getItems().clear();
+        ItemTable.getItems().addAll(InventoryWrapper.getObservableList());
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        ItemTable.setEditable(true);
     }
     @FXML
     void selectCell(MouseEvent event) {
@@ -194,4 +206,21 @@ public class ApplicationController implements Initializable {
         }
         
     }
+    @FXML
+    void editItemValue(ActionEvent event) {
+
+    }
+
+    @FXML
+    void editName(ActionEvent event) {
+
+    }
+
+    @FXML
+    void editSerialNumber(ActionEvent event) {
+
+    }
+
+
+
 }

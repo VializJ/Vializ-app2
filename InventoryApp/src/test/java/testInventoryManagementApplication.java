@@ -81,6 +81,28 @@ class testInventoryManagementApplication {
         }
         assertEquals(true, actual);
     }
+    @Test
+    void testSearch() {
+        ObservableList<Item> unfilteredInventory = FXCollections.observableArrayList();
+        ObservableList<Item> filteredInventory = FXCollections.observableArrayList();
+        boolean actual = false;
+
+        unfilteredInventory.add(new Item("100 Dollar Bill", "100.00", "A-15F-65D-447"));
+        unfilteredInventory.add(new Item("Watch", "16.42", "B-15G-69D-666"));
+        unfilteredInventory.add(new Item("laptop", "17.38", "C-15G-69D-666"));
+        unfilteredInventory.add(new Item("Bill the miniature robot", "00.00", "D-15G-69D-666"));
+        unfilteredInventory.add(new Item("Calculator", "910.21", "E-15G-69D-666"));
+        unfilteredInventory.add(new Item("American Flag", "704.76", "F-15G-69D-666"));
+        unfilteredInventory.add(new Item("American Flag themed merch by Bill", "704.76", "F-15G-69D-666"));
+
+        InventoryWrapper.setObservableList(unfilteredInventory);
+        filteredInventory = InventoryWrapper.searchObservableList("Bill");
+        if (filteredInventory.size() == 3) {
+            actual = true;
+        }
+        assertEquals(true, actual);
+
+    }
 //    @Test
 //    void testEditItem() {
 //        //create temp observable list and fill it
