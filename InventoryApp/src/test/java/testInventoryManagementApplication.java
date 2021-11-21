@@ -67,6 +67,20 @@ class testInventoryManagementApplication {
         }
         assertEquals(true, actual);
     }
+    @Test
+    void testClearInventory() {
+        ObservableList<Item> currItemList = FXCollections.observableArrayList();
+        currItemList.add(new Item("sampleItemName01", "100.00", "A-15F-65D-447"));
+        currItemList.add(new Item("sampleItemName02", "16.42", "B-15G-69D-666"));
+        InventoryWrapper.setObservableList(currItemList);
+        InventoryWrapper.clearInventory();
+        boolean actual = false;
+        currItemList = InventoryWrapper.getObservableList();
+        if (currItemList.isEmpty()) {
+            actual = true;
+        }
+        assertEquals(true, actual);
+    }
 //    @Test
 //    void testEditItem() {
 //        //create temp observable list and fill it

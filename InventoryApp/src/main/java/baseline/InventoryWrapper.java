@@ -53,4 +53,7 @@ import java.time.LocalDate;
         public static Item getCurrentSelectedItem() {
             return currentSelectedItem;
         }
+        public static void clearInventory() {
+            itemList.clear();
+        }
     }

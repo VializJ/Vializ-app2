@@ -155,7 +155,8 @@ public class ApplicationController implements Initializable {
 
     @FXML
     void clearItemsFromInventory(ActionEvent event) {
-
+        InventoryWrapper.clearInventory();
+        ItemTable.getItems().clear();
     }
 
     @FXML
