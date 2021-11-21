@@ -13,10 +13,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 
-import java.io.Serial;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -191,6 +191,10 @@ public class ApplicationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ItemTable.setEditable(true);
+
+        NameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        ItemValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        SerialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
     @FXML
     void selectCell(MouseEvent event) {
@@ -207,17 +211,67 @@ public class ApplicationController implements Initializable {
         
     }
     @FXML
-    void editItemValue(ActionEvent event) {
+    void editItemValue(TableColumn.CellEditEvent<Item, String> editedCell) {
+           ObservableList<Item> inventory = InventoryWrapper.getObservableList();
+
+            ItemValueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemPrice"));
+
+            Item itemToChange = ItemTable.getSelectionModel().getSelectedItem();
+
+        Double convertedNewItemValue = 0.00;
+            String newItemValue = editedCell.getNewValue().toString();
+
+                if (newItemValue.matches("[A-Za-z]") || newItemValue.isEmpty()) {
+                    errorLabel.setText("Value cannot contain letters");
+                    convertedNewItemValue = Double.parseDouble(newItemValue);
+                    return;
+                }
+
+//          convertedNewItemValue = Double.parseDouble(newItemValue);
+//        try {
+//            convertedNewItemValue = Double.parseDouble(newItemValue);
+//        }catch (NumberFormatException numberFormatException) {
+//            numberFormatException.printStackTrace();
+//            errorLabel.setText("Value must be a numerical value");
+//        }
+            if (convertedNewItemValue < 0.00) {
+                errorLabel.setText("Value must be greater than or equal to 0 USD");
+                return;
+            }
+
+            if (
+                    newItemValue.matches("\\d{2}.\\d{2}") ||
+                            newItemValue.matches("\\d{3}.\\d{2}") ||
+                            newItemValue.matches("\\d{4}.\\d{2}") ||
+                            newItemValue.matches("\\d{5}.\\d{2}") ||
+                            newItemValue.matches("\\d{6}.\\d{2}") ||
+                            newItemValue.matches("\\d{7}.\\d{2}") ||
+                            newItemValue.matches("\\d{8}.\\d{2}") ||
+                            newItemValue.matches("\\d{9}.\\d{2}")) {
+                itemToChange.setItemPrice(newItemValue);
+            } else {
+                errorLabel.setText("Incorrect Item Value format");
+                return;
+            }
+            for (int i = 0; i < InventoryWrapper.getObservableList().size(); i++) {
+                if (InventoryWrapper.getObservableList().get(i).equals(itemToChange)) {
+                    InventoryWrapper.getObservableList().get(i).setItemPrice(newItemValue);
+                    break;
+                }
+            }
+
+
+            return;
+        }
+
+
+    @FXML
+    void editName(TableColumn.CellEditEvent<Item, String> event) {
 
     }
 
     @FXML
-    void editName(ActionEvent event) {
-
-    }
-
-    @FXML
-    void editSerialNumber(ActionEvent event) {
+    void editSerialNumber(TableColumn.CellEditEvent<Item, String> event) {
 
     }
 

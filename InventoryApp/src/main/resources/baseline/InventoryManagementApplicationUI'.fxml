@@ -59,7 +59,7 @@
             <TextField fx:id="ItemSerialNumberTextField" promptText="Item Serial Number" />
          </children>
       </HBox>
-      <TableView fx:id="ItemTable" layoutX="14.0" layoutY="83.0" onMouseClicked="#selectCell" prefHeight="277.0" prefWidth="460.0">
+      <TableView fx:id="ItemTable" editable="true" layoutX="14.0" layoutY="83.0" onMouseClicked="#selectCell" prefHeight="277.0" prefWidth="460.0">
         <columns>
           <TableColumn fx:id="NameColumn" onEditCommit="#editName" prefWidth="75.0" text="Name" />
           <TableColumn fx:id="ItemValueColumn" onEditCommit="#editItemValue" prefWidth="88.0" text="Item Value" />
