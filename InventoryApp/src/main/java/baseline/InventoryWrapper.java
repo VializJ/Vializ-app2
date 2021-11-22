@@ -26,10 +26,9 @@ public class InventoryWrapper {
         }
 
 
-        public static Item addItemToList(String name, String value, String serialNumber) {
+        public static void addItemToList(String name, String value, String serialNumber) {
             Item cell = new Item(name, value, serialNumber);
             itemList.add(cell);
-            return cell;
             //create new text field
             //prompt user to enter the text in field
         }
@@ -76,10 +75,10 @@ public class InventoryWrapper {
             String[] array = wordsToSearchFor.trim().split(" ");
             ObservableList<Item> filteredInventory = FXCollections.observableArrayList();
 
-            for (int i = 0; i < array.length; i++) {
-                for (int j = 0; j < itemList.size(); j++) {
-                    if (itemList.get(j).getItemName().contains(array[i]) || itemList.get(j).getItemSerialNumber().contains(array[i])) {
-                        filteredInventory.add(itemList.get(j));
+            for (String s : array) {
+                for (Item item : itemList) {
+                    if (item.getItemName().contains(s) || item.getItemSerialNumber().contains(s)) {
+                        filteredInventory.add(item);
                     }
                 }
             }
@@ -93,27 +92,12 @@ public class InventoryWrapper {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            //while(input.hasNext()) {
-              String[] array = input.nextLine().split("<");
-                System.out.println(array[0]);
 
-            //}
         }
         public static void parseJSON(File inputFile) throws IOException {
             Gson gson = new Gson();
             itemList.clear();
             ArrayList<Item> newInventory = new ArrayList<>();
-            String line = null;
-//            try {
-//                JsonReader reader = new JsonReader(new FileReader(inputFile));
-//                //gson.fromJson(reader);
-//
-//
-//                itemList = gson.fromJson(reader, InventoryWrapper.class);
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
 
             JsonReader reader = new JsonReader(new FileReader(inputFile));
 
@@ -122,14 +106,6 @@ public class InventoryWrapper {
                 newInventory.add(itemFromJson);
 
             }
-            System.out.println(newInventory.toString());
-            //setObservableList(newInventory);
-
-
-        }
-        public static void parseTSV(File inputFile) {
-
-
 
 
 

@@ -6,8 +6,8 @@
 
 
 package baseline;
-
-import com.google.gson.Gson;
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -104,7 +105,7 @@ public class ApplicationController implements Initializable {
         if (!errorLabel.getText().isEmpty()) {
             return;
         }
-        errorLabel.setText(Validate.validateItemSerialNumber(InventoryWrapper.getObservableList(), serialNumber));
+        errorLabel.setText(Validate.validateItemSerialNumber(serialNumber));
         if (!errorLabel.getText().isEmpty()) {
             return;
         }
@@ -128,14 +129,12 @@ public class ApplicationController implements Initializable {
     void deleteItemFromInventory(ActionEvent event) {
         ObservableList<Item> newInventory = ItemTable.getItems();
         //Make a list to hold the table items
-        //Item itemToDelete = ItemTable.getSelectionModel().getSelectedItem();
         Item itemToDelete = InventoryWrapper.getCurrentSelectedItem();
         //find the item we want to delete
         newInventory.remove(itemToDelete);
 
         InventoryWrapper.deleteItemFromList(itemToDelete);
 
-        System.out.println(InventoryWrapper.getObservableList());
         ItemTable.setItems(InventoryWrapper.getObservableList());
     }
 
@@ -163,14 +162,7 @@ public class ApplicationController implements Initializable {
     @FXML
     void selectCell(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            //try {
-                InventoryWrapper inventoryWrapper = new InventoryWrapper();
-                currItemIndex = inventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem());
-                //currentItemSelected.setText("Currently selected task: " + ItemTable.getSelectionModel().getSelectedItem().getItemName());
-                //update the currItemIndex with index of the currently selected cell
-//            } catch (Exception e) {
-//                currentItemSelected.setText("Currently selected task: ");
-//            }
+                currItemIndex = InventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem());
         }
         
     }
@@ -179,7 +171,7 @@ public class ApplicationController implements Initializable {
         ObservableList<Item> inventory = InventoryWrapper.getObservableList();
 
         Item itemToChange = ItemTable.getSelectionModel().getSelectedItem();
-        String newItemName = editedCell.getNewValue().toString();
+        String newItemName = editedCell.getNewValue();
 
 
         if (newItemName.length() > 256) {
@@ -199,7 +191,7 @@ public class ApplicationController implements Initializable {
             ItemValueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemPrice"));
             Item itemToChange = ItemTable.getSelectionModel().getSelectedItem();
         Double convertedNewItemValue = 0.00;
-            String newItemValue = editedCell.getNewValue().toString();
+            String newItemValue = editedCell.getNewValue();
                 if (newItemValue.matches("[A-Za-z]") || newItemValue.isEmpty()) {
                     errorLabel.setText("Value cannot contain letters");
                     convertedNewItemValue = Double.parseDouble(newItemValue);
@@ -244,25 +236,16 @@ public class ApplicationController implements Initializable {
 
 
         Item itemToChange = ItemTable.getSelectionModel().getSelectedItem();
-        String serialNumberToValidate = editedCell.getNewValue().toString();
+        String serialNumberToValidate = editedCell.getNewValue();
 
         if (!serialNumberToValidate.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
             errorLabel.setText("Serial number not in correct format try again");
             return;
         }
-//        for (int i = 0; i < itemList.size(); i++) {
-//            if (serialNumber.equals(itemList.get(i).getItemSerialNumber())) {
-//                System.out.println(serialNumber);
-//                System.out.println(itemList.get(i).getItemSerialNumber());
-//                errorLabel.setText("Serial number already exists try again");
-//                return;
-//            }
         for (int i = 0; i < InventoryWrapper.getObservableList().size(); i++) {
             if (serialNumberToValidate.equals(InventoryWrapper.getObservableList().get(i).getItemSerialNumber())) {
             errorLabel.setText("Serial number already exists try again");
                 return;
-            }else {
-                continue;
             }
         }
 
@@ -288,7 +271,6 @@ public class ApplicationController implements Initializable {
         * */
 
         InventoryManagementApplication IMA = new InventoryManagementApplication();
-        //InventoryWrapper.setObservableList(ItemTable.getItems());
         ObservableList<Item> inventoryToFile = InventoryWrapper.getObservableList();
 
 
@@ -336,10 +318,10 @@ public class ApplicationController implements Initializable {
 
         ObservableList<Item> inventoryToFile = InventoryWrapper.getObservableList();
         String line;
-        for (int i = 0; i < inventoryToFile.size(); i++) {
-            line =  inventoryToFile.get(i).getItemName() + "\t" +
-                    inventoryToFile.get(i).getItemPrice() + "\t" +
-                    inventoryToFile.get(i).getItemSerialNumber() + "\t\n";
+        for (Item item : inventoryToFile) {
+            line = item.getItemName() + "\t" +
+                    item.getItemPrice() + "\t" +
+                    item.getItemSerialNumber() + "\t\n";
             pw.write(line);
         }
         pw.close();
@@ -370,6 +352,7 @@ public class ApplicationController implements Initializable {
         SerialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("ItemSerialNumber"));
 
 
+
         InventoryManagementApplication IMA = new InventoryManagementApplication();
         File inputFile = IMA.loadFile();
 
@@ -378,7 +361,7 @@ public class ApplicationController implements Initializable {
         for (int i = 0; i < fileName.length(); i++) {
             if (fileName.contains(".txt")) {
                     ObservableList<Item> currObservableList = FXCollections.observableArrayList();
-                    Scanner input = null;
+                    Scanner input;
 
                     try {
                         input = new Scanner(inputFile);
@@ -391,23 +374,44 @@ public class ApplicationController implements Initializable {
                             currObservableList.add(itemFromList);
                         }
                         InventoryWrapper.setObservableList(currObservableList);
+                        ItemTable.getItems().clear();
                         ItemTable.setItems(InventoryWrapper.getObservableList());
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
 
                 //load tsv parser
-                //InventoryWrapper.parseTSV(inputFile);
             }else if (fileName.contains(".json")) {
+
+                Gson gson = new Gson();
+                JsonReader reader = new JsonReader(new FileReader(inputFile));
+                ArrayList<Item> newInventory = gson.fromJson(reader, Item[].class);
+                InventoryWrapper.setObservableList(FXCollections.observableList(newInventory));
+
+                /*Get the Json array from user input file
+                * parse the file and extract item information
+                * clear the old inventory and update it
+                * update tableview to reflect new inventory
+                *
+                * */
+                    ItemTable.getItems().clear();
+
+
+                    ItemTable.setItems(FXCollections.observableList(newInventory));
+
+
                 //load json parser
-                InventoryWrapper.parseJSON(inputFile);
+
             }else if(fileName.contains(".html")) {
                 //load HTML parser
+
+
+
+
 
                 InventoryWrapper.parseHTML(inputFile);
             }
         }
-        //ItemTable.setItems(InventoryWrapper.getObservableList());
 
 
 

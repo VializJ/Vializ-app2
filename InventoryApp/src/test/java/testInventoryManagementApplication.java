@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class testInventoryManagementApplication {
 
@@ -20,17 +21,14 @@ class testInventoryManagementApplication {
         //create temp observable list and fill it
         //check if the lists items are there
 
-        ObservableList<Item> itemList = FXCollections.observableArrayList();
+        ObservableList<Item> itemList;
         InventoryWrapper.addItemToList("sampleItemName", "15.00", "A-15F-65D-447");
 
         itemList = InventoryWrapper.getObservableList();
         Item sampleItem = itemList.get(0);
-        boolean actual = false;
+        boolean actual = sampleItem.getItemName().equals("sampleItemName");
 
-        if (sampleItem.getItemName().equals("sampleItemName")) {
-            actual = true;
-        }
-        assertEquals(true, actual);
+        assertTrue(actual);
     }
     @Test
     void testSelectItem() {
@@ -39,10 +37,7 @@ class testInventoryManagementApplication {
 
         int actual = InventoryWrapper.selectListItem(sampleItem);
         assertEquals(0, actual);
-
     }
-
-
 
     @Test
     void testRemoveItem() {
@@ -59,13 +54,14 @@ class testInventoryManagementApplication {
         //check to see if the item exists
         currItemList = InventoryWrapper.getObservableList();
 
-        for (int i = 0; i < currItemList.size(); i++) {
-            if (!currItemList.get(i).equals(itemDeletedName)) {
+        for (Item item : currItemList) {
+            if (!item.equals(itemDeletedName)) {
                 actual = true;
+                break;
             }
 
         }
-        assertEquals(true, actual);
+        assertTrue(actual);
     }
     @Test
     void testClearInventory() {
@@ -79,12 +75,12 @@ class testInventoryManagementApplication {
         if (currItemList.isEmpty()) {
             actual = true;
         }
-        assertEquals(true, actual);
+        assertTrue(actual);
     }
     @Test
     void testSearch() {
         ObservableList<Item> unfilteredInventory = FXCollections.observableArrayList();
-        ObservableList<Item> filteredInventory = FXCollections.observableArrayList();
+        ObservableList<Item> filteredInventory;
         boolean actual = false;
 
         unfilteredInventory.add(new Item("100 Dollar Bill", "100.00", "A-15F-65D-447"));
@@ -100,52 +96,7 @@ class testInventoryManagementApplication {
         if (filteredInventory.size() == 3) {
             actual = true;
         }
-        assertEquals(true, actual);
+        assertTrue(actual);
 
     }
-//    @Test
-//    void testEditItem() {
-//        //create temp observable list and fill it
-//        //edit the item and check if the new description is filled
-//    }
-//    @Test
-//    void testValidateEditDescription() {
-//        //create temp observable list and fill it
-//        //create a sample new description that shouldn't work i.e. empty string
-//        //try to add it to the observable list
-//        //check to see if the item we chose to change the description of is actually changed
-//    }
-//    @Test
-//    void testValidateEditValue() {
-//        //create temp observable list and fill it
-//        //create a sample new value that shouldn't work i.e. -15
-//        //try to add it to the observable list
-//        //check to see if the item we chose to change the value of is actually changed
-//    }
-//    @Test
-//    void testValidateEditSerialNumber() {
-//        //create temp observable list and fill it
-//        //create a sample new serial number that shouldn't work i.e. one that's equal to an existing one
-//        //try to add it to the observable list
-//        //check to see if the item we chose to change the serial number of is actually changed
-//    }
-//    @Test
-//    void testValidateSerialNumber() {
-//        String sampleSerialNumber = "A-15F-65D-447";
-//        Item cell = new Item("sampleItemName", "15.00", sampleSerialNumber);
-//
-//        ObservableList<Item> itemList = FXCollections.observableArrayList();
-//        itemList.add(cell);
-//
-//        errorLabel.setText("");
-//        errorLabel = Validate.validateItemSerialNumber(itemList, sampleSerialNumber, errorLabel);
-//        boolean actual = false;
-//
-//        if (errorLabel.equals("")) {
-//            actual = true;
-//        }
-//            assertEquals(true, actual);
-//
-//
-//    }
 }

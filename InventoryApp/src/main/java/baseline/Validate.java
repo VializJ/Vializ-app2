@@ -4,8 +4,6 @@
  */
 
 package baseline;
-import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
 
 public class Validate {
 
@@ -21,17 +19,6 @@ public static String validateItemName(String nameToValidate) {
     return "";
     }
 public static String validateItemValue(String valueToValidate) {
-//    if (!valueToValidate.matches("\\d{2}.\\d{2}")) {
-//        errorLabel.setText("Invalid item value format");
-//        return errorLabel;
-//    }
-//
-//    Double valueConverted = Double.parseDouble(valueToValidate);
-//
-//    if (valueConverted < 0) {
-//        errorLabel.setText("Item must have a value greater than or equal to 0 try again");
-//        return errorLabel;
-//    }
     try {
         Double valueConverted = Double.parseDouble(valueToValidate);
 
@@ -69,44 +56,21 @@ public static String validateItemValue(String valueToValidate) {
     //check if the value is greater than 0
     //if so return true
 }
-public static String validateItemSerialNumber(ObservableList<Item> itemList, String serialNumberToValidate) {
+public static String validateItemSerialNumber(String serialNumberToValidate) {
     //check if the serial number is in the form 'A-XXX-XXX-XXX'; possibly use regex expression
     //loop through the entire observable list accessing each item's serial number
 
-    ////[A-Za-z]-[A-ZaZ0-9]-[A-ZaZ0-9]-[A-ZaZ0-9]
 
-
-
-//    if (!serialNumberToValidate.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
-//        errorLabel.setText("Serial number not in correct format try again");
-//        return errorLabel;
-//    }
-//    for (int i = 0; i < itemList.size(); i++) {
-//        if (serialNumberToValidate.equals(itemList.get(i))) {
-//            errorLabel.setText("Serial number already exists try again");
-//            return errorLabel;
-//        }else {
-//            continue;
-//        }
-//    }
 
 
     if (!serialNumberToValidate.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
             return "Serial number not in correct format try again";
     }
-//        for (int i = 0; i < itemList.size(); i++) {
-//            if (serialNumber.equals(itemList.get(i).getItemSerialNumber())) {
-//                System.out.println(serialNumber);
-//                System.out.println(itemList.get(i).getItemSerialNumber());
-//                errorLabel.setText("Serial number already exists try again");
-//                return;
-//            }
+
         for (int i = 0; i < InventoryWrapper.getObservableList().size(); i++) {
             if (serialNumberToValidate.equals(InventoryWrapper.getObservableList().get(i).getItemSerialNumber())) {
                 System.out.println(serialNumberToValidate);
                 return "Serial number already exists try again";
-            }else {
-                continue;
             }
         }
 
