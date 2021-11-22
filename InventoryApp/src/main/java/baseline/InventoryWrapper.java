@@ -6,8 +6,14 @@
 
 
 package baseline;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class InventoryWrapper {
@@ -79,5 +85,53 @@ public class InventoryWrapper {
             }
 
             return filteredInventory;
+        }
+        public static void parseHTML(File inputFile) {
+            Scanner input = null;
+            try {
+                input = new Scanner(inputFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            //while(input.hasNext()) {
+              String[] array = input.nextLine().split("<");
+                System.out.println(array[0]);
+
+            //}
+        }
+        public static void parseJSON(File inputFile) throws IOException {
+            Gson gson = new Gson();
+            itemList.clear();
+            ArrayList<Item> newInventory = new ArrayList<>();
+            String line = null;
+//            try {
+//                JsonReader reader = new JsonReader(new FileReader(inputFile));
+//                //gson.fromJson(reader);
+//
+//
+//                itemList = gson.fromJson(reader, InventoryWrapper.class);
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+
+            JsonReader reader = new JsonReader(new FileReader(inputFile));
+
+            while (reader.hasNext()) {
+                Item itemFromJson = gson.fromJson(reader, Item.class);
+                newInventory.add(itemFromJson);
+
+            }
+            System.out.println(newInventory.toString());
+            //setObservableList(newInventory);
+
+
+        }
+        public static void parseTSV(File inputFile) {
+
+
+
+
+
         }
     }

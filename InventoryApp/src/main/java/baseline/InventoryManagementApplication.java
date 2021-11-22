@@ -51,5 +51,12 @@ public class InventoryManagementApplication extends Application {
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON File", "*.json"));
         return fc.showSaveDialog(globalStage);
     }
+
+    public File loadFile() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Load Inventory");
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Allowed File Types" , "*.json", "*.txt", "*.html"));
+        return fc.showOpenDialog(globalStage);
+    }
 }
 

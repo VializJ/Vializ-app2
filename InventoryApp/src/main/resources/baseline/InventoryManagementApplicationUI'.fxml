@@ -11,8 +11,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.TextFlow?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="baseline.ApplicationController">
    <children>
@@ -25,6 +23,11 @@
                   <MenuItem fx:id="SaveAsJSONFileOption" mnemonicParsing="false" onAction="#saveAsJSON" text="Save as: JSON" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Load">
+              <items>
+                <MenuItem fx:id="loadInventory" mnemonicParsing="false" onAction="#loadInventory" text="Load Inventory" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="User Guide" />
@@ -45,12 +48,6 @@
             <Button fx:id="RevertSearchButton" mnemonicParsing="false" onAction="#revertSearch" text="Revert Search" />
         </buttons>
       </ButtonBar>
-      <VBox alignment="TOP_CENTER" layoutX="478.0" layoutY="75.0" prefHeight="294.0" prefWidth="241.0">
-         <children>
-            <Label fx:id="ItemNameLabel" text="Item Name" />
-            <TextFlow fx:id="ItemInfoTextFlow" prefHeight="277.0" prefWidth="241.0" />
-         </children>
-      </VBox>
       <HBox alignment="CENTER" layoutX="13.0" layoutY="371.0" prefHeight="46.0" prefWidth="706.0" spacing="25.0">
          <children>
             <Button fx:id="AddButton" mnemonicParsing="false" onAction="#addItemToInventory" prefHeight="25.0" prefWidth="94.0" text="Add" />
@@ -59,11 +56,11 @@
             <TextField fx:id="ItemSerialNumberTextField" promptText="Item Serial Number" />
          </children>
       </HBox>
-      <TableView fx:id="ItemTable" editable="true" layoutX="14.0" layoutY="83.0" onMouseClicked="#selectCell" prefHeight="277.0" prefWidth="460.0">
+      <TableView fx:id="ItemTable" editable="true" layoutX="14.0" layoutY="83.0" onMouseClicked="#selectCell" prefHeight="277.0" prefWidth="717.0">
         <columns>
-          <TableColumn fx:id="NameColumn" onEditCommit="#editName" prefWidth="75.0" text="Name" />
-          <TableColumn fx:id="ItemValueColumn" onEditCommit="#editItemValue" prefWidth="88.0" text="Item Value" />
-            <TableColumn fx:id="SerialNumberColumn" onEditCommit="#editSerialNumber" prefWidth="296.0" text="Serial Number" />
+          <TableColumn fx:id="NameColumn" onEditCommit="#editName" prefWidth="246.0" text="Name" />
+          <TableColumn fx:id="ItemValueColumn" onEditCommit="#editItemValue" prefWidth="258.0" text="Item Value" />
+            <TableColumn fx:id="SerialNumberColumn" onEditCommit="#editSerialNumber" prefWidth="212.0" text="Serial Number" />
         </columns>
       </TableView>
       <HBox layoutX="175.0" layoutY="410.0" prefHeight="27.0" prefWidth="505.0">
