@@ -39,7 +39,8 @@ public static String validateItemValue(String valueToValidate) {
             return "Item must have a value greater than or equal to 0 try again";
         }
 
-        if (valueToValidate.matches("\\d{2}.\\d{2}") ||
+        if (    valueToValidate.matches("\\d.\\d{2}") ||
+                valueToValidate.matches("\\d{2}.\\d{2}") ||
                 valueToValidate.matches("\\d{3}.\\d{2}") ||
                 valueToValidate.matches("\\d{4}.\\d{2}") ||
                 valueToValidate.matches("\\d{5}.\\d{2}") ||

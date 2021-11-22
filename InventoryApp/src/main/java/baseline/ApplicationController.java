@@ -269,8 +269,8 @@ public class ApplicationController implements Initializable {
                 return;
             }
 
-            if (
-                    newItemValue.matches("\\d{2}.\\d{2}") ||
+            if (            newItemValue.matches("\\d.\\d{2}") ||
+                            newItemValue.matches("\\d{2}.\\d{2}") ||
                             newItemValue.matches("\\d{3}.\\d{2}") ||
                             newItemValue.matches("\\d{4}.\\d{2}") ||
                             newItemValue.matches("\\d{5}.\\d{2}") ||

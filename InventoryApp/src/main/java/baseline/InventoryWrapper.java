@@ -1,9 +1,7 @@
 package baseline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.DatePicker;
-import java.time.LocalDate;
-import java.util.Arrays;
+
 
 public class InventoryWrapper {
         private static ObservableList<Item> itemList = FXCollections.observableArrayList();
@@ -25,13 +23,14 @@ public class InventoryWrapper {
 
         public static String deleteItemFromList(Item itemToDelete) {
             String itemToDeleteSerialNumber = "";
-            for (int i = 0; i < itemList.size(); i++) {
+            int i = 0;
+            for (i = 0; i < itemList.size(); i++) {
                 if (itemList.get(i).equals(itemToDelete)) {
                     //delete
-                    //itemToDeleteSerialNumber = itemList.get(i).getItemSerialNumber();
-                    itemList.remove(i);
+                    break;
                 }
             }
+            itemList.remove(i);
             return itemToDeleteSerialNumber;
         }
 
@@ -48,7 +47,7 @@ public class InventoryWrapper {
                     }
             }
 
-            return i;
+            return Integer.valueOf(i);
             //prompt user to select item using checkbox control
             //return the selected list
 
