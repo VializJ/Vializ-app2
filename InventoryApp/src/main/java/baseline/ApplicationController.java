@@ -7,6 +7,7 @@
 
 package baseline;
 
+import com.google.gson.Gson;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -388,11 +389,6 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
-    void saveAsJSON(ActionEvent event) {
-
-    }
-
-    @FXML
     void saveAsTSV(ActionEvent event) throws FileNotFoundException {
         InventoryManagementApplication IMA = new InventoryManagementApplication();
         File outputFile = IMA.saveFileTSV();
@@ -410,7 +406,22 @@ public class ApplicationController implements Initializable {
         pw.close();
 
     }
+    @FXML
+    void saveAsJSON(ActionEvent event) throws FileNotFoundException {
+        ObservableList<Item> inventoryToFile = InventoryWrapper.getObservableList();
+        Gson gson = new Gson();
+        InventoryManagementApplication IMA = new InventoryManagementApplication();
+        File outputFile = IMA.saveFileJSON();
+        String line;
+        PrintWriter pw = new PrintWriter(outputFile);
 
+        for (int i = 0; i < inventoryToFile.size(); i++) {
+            line = gson.toJson(inventoryToFile.get(i));
+            pw.write(line);
+        }
+        pw.close();
+
+    }
 
 
 

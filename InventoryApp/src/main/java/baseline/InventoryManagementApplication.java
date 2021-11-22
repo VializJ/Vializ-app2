@@ -44,5 +44,12 @@ public class InventoryManagementApplication extends Application {
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Document", "*.txt"));
         return fc.showSaveDialog(globalStage);
     }
+
+    public File saveFileJSON() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save as JSON");
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON File", "*.json"));
+        return fc.showSaveDialog(globalStage);
+    }
 }
 
