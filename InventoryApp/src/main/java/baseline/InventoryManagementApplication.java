@@ -6,7 +6,6 @@
 
 
 package baseline;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,7 +34,6 @@ public class InventoryManagementApplication extends Application {
     public File saveFileHTML() {
         FileChooser fc = new FileChooser();
         fc.setTitle("Save as HTML");
-        fc.setInitialFileName("Inventory");
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("HTML Document", "*.html"));
         return fc.showSaveDialog(globalStage);
     }

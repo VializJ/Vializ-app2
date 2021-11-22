@@ -34,10 +34,10 @@ class testInventoryManagementApplication {
     }
     @Test
     void testSelectItem() {
-
-        InventoryWrapper iw = new InventoryWrapper();
         InventoryWrapper.addItemToList("sampleItemName", "15.00", "A-15F-65D-447");
-        int actual = iw.selectListItem("sampleItemName");
+        Item sampleItem = new Item("sampleItemName", "15.00", "A-15F-65D-447");
+
+        int actual = InventoryWrapper.selectListItem(sampleItem);
         assertEquals(0, actual);
 
     }

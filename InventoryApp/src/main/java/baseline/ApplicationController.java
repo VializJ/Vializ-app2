@@ -16,10 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
-import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -215,7 +211,7 @@ public class ApplicationController implements Initializable {
     void selectCell(MouseEvent event) {
         if (event.getClickCount() == 1) {
             //try {
-               InventoryWrapper inventoryWrapper = new InventoryWrapper();
+                InventoryWrapper inventoryWrapper = new InventoryWrapper();
                 currItemIndex = inventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem());
                 //currentItemSelected.setText("Currently selected task: " + ItemTable.getSelectionModel().getSelectedItem().getItemName());
                 //update the currItemIndex with index of the currently selected cell
@@ -346,7 +342,7 @@ public class ApplicationController implements Initializable {
         * */
 
         InventoryManagementApplication IMA = new InventoryManagementApplication();
-        InventoryWrapper.setObservableList(ItemTable.getItems());
+        //InventoryWrapper.setObservableList(ItemTable.getItems());
         ObservableList<Item> inventoryToFile = InventoryWrapper.getObservableList();
 
 
@@ -354,40 +350,6 @@ public class ApplicationController implements Initializable {
        PrintWriter pw = new PrintWriter(outputFile);
         String rowAlign = "\t";
         String cellAlign = "\t\t";
-
-
-//       if (outputFile.exists()) {
-//           for (Item item : inventoryToFile) {
-//                   /*Initial names of the columns*/
-//                   pw.write("<table>\n" + rowAlign + "<tr>\n" +
-//                           cellAlign + "<td>&nbsp;</td>\n" +
-//                           cellAlign + "<td>ItemName</td>\n" +
-//                           cellAlign + "<td>ItemValue</td>\n" +
-//                           cellAlign + "<td>ItemSerialNumber</td>\n" +
-//                           rowAlign + "</tr>\n"
-//                   );
-//           }
-//       }
-
-
-        //FileChooser filechooser = new FileChooser();
-
-//        try {
-//            PrintWriter pw = new PrintWriter(outputFile);
-//            pw.write("Example");
-//            pw.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
-
-        //File html = filechooser.showSaveDialog(new Stage());
-
-//        if (html != null) {
-//            saveSystem(html, "Example");
-//        }
-
-
 
 
 
@@ -419,16 +381,16 @@ public class ApplicationController implements Initializable {
         int numberOfInventoryItems = inventoryToFile.size();
         String tableRowToPrint;
        if (outputFile.exists()) {
-//           for (int i = 0; i < numberOfInventoryItems; i++) {
-//               String itemNumber = "Item number: " + (i+1);
-//               tableRowToPrint = "<tr>\n" + rowAlign + "<td>" + itemNumber + "</td>\n";
-//                tableRowToPrint = tableRowToPrint + cellAlign + "<td>" +
-//                       inventoryToFile.get(i).getItemName() + "</td>\n" + cellAlign +
-//                       inventoryToFile.get(i).getItemPrice() + "</td>\n" + cellAlign +
-//                       inventoryToFile.get(i).getItemSerialNumber() + "</td>\n" + rowAlign +
-//                        "</tr>\n";
-//            pw.write(tableRowToPrint);
-//           }
+           for (int i = 0; i < numberOfInventoryItems; i++) {
+               String itemNumber = "Item number: " + (i+1);
+               tableRowToPrint = "<tr>\n" + rowAlign + "<td>" + itemNumber + "</td>\n";
+                tableRowToPrint = tableRowToPrint + cellAlign + "<td>" +
+                       inventoryToFile.get(i).getItemName() + "</td>\n" + cellAlign + "<td>" +
+                       inventoryToFile.get(i).getItemPrice() + "</td>\n" + cellAlign + "<td>" +
+                       inventoryToFile.get(i).getItemSerialNumber() + "</td>\n" + rowAlign +
+                        "</tr>\n";
+            pw.write(tableRowToPrint);
+           }
            pw.write("</table>");
            pw.close();
        }

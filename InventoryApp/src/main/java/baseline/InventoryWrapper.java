@@ -1,3 +1,10 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
+ *  Copyright 2021 Javier Vializ
+ */
+
+
+
 package baseline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +30,7 @@ public class InventoryWrapper {
 
         public static String deleteItemFromList(Item itemToDelete) {
             String itemToDeleteSerialNumber = "";
-            int i = 0;
+            int i;
             for (i = 0; i < itemList.size(); i++) {
                 if (itemList.get(i).equals(itemToDelete)) {
                     //delete
@@ -39,15 +46,16 @@ public class InventoryWrapper {
             itemList = newList;
         }
 
-        public int selectListItem(Item itemSelected) {
-            int i = 0;
+        public static int selectListItem(Item itemSelected) {
+            int i;
             for (i = 0; i < itemList.size(); i++) {
-                if (itemList.get(i).equals(itemSelected)) {
+                if (itemList.get(i).equals(itemSelected) || itemSelected.getItemSerialNumber().equals(itemList.get(i).getItemSerialNumber())) {
                         currentSelectedItem = itemList.get(i);
+                        break;
                     }
-            }
+                }
 
-            return Integer.valueOf(i);
+            return i;
             //prompt user to select item using checkbox control
             //return the selected list
 
