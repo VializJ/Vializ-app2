@@ -367,17 +367,7 @@ public class ApplicationController implements Initializable {
                cellAlign + "<td>ItemSerialNumber</td>\n" +
                rowAlign + "</tr>\n"
        );
-//       String html = "<p>text</p>";
-//       File f = new File("\\docs\\test.html");
-//       try {
-//           BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-//           bw.write(html);
-//
-//       }catch (IOException e) {
-//           e.printStackTrace();
-//       }
 
-//
         int numberOfInventoryItems = inventoryToFile.size();
         String tableRowToPrint;
        if (outputFile.exists()) {
@@ -396,16 +386,6 @@ public class ApplicationController implements Initializable {
        }
 
     }
-//    public void saveSystem(File file, String content) {
-//        try {
-//            PrintWriter pw = new PrintWriter(file);
-//            pw.write(content);
-//            pw.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     @FXML
     void saveAsJSON(ActionEvent event) {
@@ -413,7 +393,21 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
-    void saveAsTSV(ActionEvent event) {
+    void saveAsTSV(ActionEvent event) throws FileNotFoundException {
+        InventoryManagementApplication IMA = new InventoryManagementApplication();
+        File outputFile = IMA.saveFileTSV();
+
+            PrintWriter pw = new PrintWriter(outputFile);
+
+        ObservableList<Item> inventoryToFile = InventoryWrapper.getObservableList();
+        String line;
+        for (int i = 0; i < inventoryToFile.size(); i++) {
+            line =  inventoryToFile.get(i).getItemName() + "\t" +
+                    inventoryToFile.get(i).getItemPrice() + "\t" +
+                    inventoryToFile.get(i).getItemSerialNumber() + "\t\n";
+            pw.write(line);
+        }
+        pw.close();
 
     }
 

@@ -37,5 +37,12 @@ public class InventoryManagementApplication extends Application {
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("HTML Document", "*.html"));
         return fc.showSaveDialog(globalStage);
     }
+
+    public File saveFileTSV() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save as Tab Separated");
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Document", "*.txt"));
+        return fc.showSaveDialog(globalStage);
+    }
 }
 
