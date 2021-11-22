@@ -76,11 +76,6 @@ public static String validateItemSerialNumber(ObservableList<Item> itemList, Str
 
 
 
-
-
-
-
-
 //    if (!serialNumberToValidate.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
 //        errorLabel.setText("Serial number not in correct format try again");
 //        return errorLabel;

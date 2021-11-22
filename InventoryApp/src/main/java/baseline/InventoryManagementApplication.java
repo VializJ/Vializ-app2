@@ -11,7 +11,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 
 public class InventoryManagementApplication extends Application {
@@ -27,6 +30,14 @@ public class InventoryManagementApplication extends Application {
     }
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public File saveFileHTML() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save as HTML");
+        fc.setInitialFileName("Inventory");
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("HTML Document", "*.html"));
+        return fc.showSaveDialog(globalStage);
     }
 }
 

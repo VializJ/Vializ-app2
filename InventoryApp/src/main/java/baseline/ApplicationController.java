@@ -16,7 +16,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -71,6 +75,15 @@ public class ApplicationController implements Initializable {
     @FXML
     private Button RevertSearchButton;
 
+    @FXML
+    private MenuItem SaveAsHTMLFileOption;
+
+    @FXML
+    private MenuItem SaveAsJSONFileOption;
+
+    @FXML
+    private MenuItem SaveAsTSVFileOption;
+
 
     @FXML
     void addItemToInventory(ActionEvent event) {
@@ -92,7 +105,6 @@ public class ApplicationController implements Initializable {
         }
         errorLabel.setText(Validate.validateItemSerialNumber(InventoryWrapper.getObservableList(), serialNumber));
         if (!errorLabel.getText().isEmpty()) {
-            System.out.println(errorLabel.toString());
             return;
         }
 //        if (nameText.length() > 256) {
@@ -147,9 +159,9 @@ public class ApplicationController implements Initializable {
 //                continue;
 //            }
 //        }
-        Item cell = InventoryWrapper.addItemToList(nameText, itemValue, serialNumber);
-        ItemTable.getItems().add(cell);
-
+        InventoryWrapper.addItemToList(nameText, itemValue, serialNumber);
+        //ItemTable.getItems().add(cell);
+        ItemTable.setItems(InventoryWrapper.getObservableList());
         ItemNameTextField.setText("");
         ItemValueTextField.setText("");
         ItemSerialNumberTextField.setText("");
@@ -167,11 +179,14 @@ public class ApplicationController implements Initializable {
     void deleteItemFromInventory(ActionEvent event) {
         ObservableList<Item> newInventory = ItemTable.getItems();
         //Make a list to hold the table items
-        Item itemToDelete = ItemTable.getSelectionModel().getSelectedItem();
+        //Item itemToDelete = ItemTable.getSelectionModel().getSelectedItem();
+        Item itemToDelete = InventoryWrapper.getCurrentSelectedItem();
         //find the item we want to delete
         newInventory.remove(itemToDelete);
 
         InventoryWrapper.deleteItemFromList(itemToDelete);
+
+        System.out.println(InventoryWrapper.getObservableList());
         ItemTable.setItems(InventoryWrapper.getObservableList());
     }
 
@@ -201,7 +216,7 @@ public class ApplicationController implements Initializable {
         if (event.getClickCount() == 1) {
             //try {
                InventoryWrapper inventoryWrapper = new InventoryWrapper();
-                currItemIndex = inventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem().getItemSerialNumber());
+                currItemIndex = inventoryWrapper.selectListItem(ItemTable.getSelectionModel().getSelectedItem());
                 //currentItemSelected.setText("Currently selected task: " + ItemTable.getSelectionModel().getSelectedItem().getItemName());
                 //update the currItemIndex with index of the currently selected cell
 //            } catch (Exception e) {
@@ -211,16 +226,31 @@ public class ApplicationController implements Initializable {
         
     }
     @FXML
+    void editName(TableColumn.CellEditEvent<Item, String> editedCell) {
+        ObservableList<Item> inventory = InventoryWrapper.getObservableList();
+
+        Item itemToChange = ItemTable.getSelectionModel().getSelectedItem();
+        String newItemName = editedCell.getNewValue().toString();
+
+
+        if (newItemName.length() > 256) {
+            errorLabel.setText("Too many characters try again");
+            return;
+        }else if(newItemName.length() < 2) {
+            errorLabel.setText("Too few characters try again");
+            return;
+        }
+        itemToChange.setItemName(newItemName);
+        NameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemName"));
+    }
+
+    @FXML
     void editItemValue(TableColumn.CellEditEvent<Item, String> editedCell) {
            ObservableList<Item> inventory = InventoryWrapper.getObservableList();
-
             ItemValueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("itemPrice"));
-
             Item itemToChange = ItemTable.getSelectionModel().getSelectedItem();
-
         Double convertedNewItemValue = 0.00;
             String newItemValue = editedCell.getNewValue().toString();
-
                 if (newItemValue.matches("[A-Za-z]") || newItemValue.isEmpty()) {
                     errorLabel.setText("Value cannot contain letters");
                     convertedNewItemValue = Double.parseDouble(newItemValue);
@@ -265,15 +295,166 @@ public class ApplicationController implements Initializable {
         }
 
 
+
     @FXML
-    void editName(TableColumn.CellEditEvent<Item, String> event) {
+    void editSerialNumber(TableColumn.CellEditEvent<Item, String> editedCell) {
+        ObservableList<Item> inventory = InventoryWrapper.getObservableList();
+
+
+        Item itemToChange = ItemTable.getSelectionModel().getSelectedItem();
+        String serialNumberToValidate = editedCell.getNewValue().toString();
+
+        if (!serialNumberToValidate.matches("[A-Za-z]-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}")) {
+            errorLabel.setText("Serial number not in correct format try again");
+            return;
+        }
+//        for (int i = 0; i < itemList.size(); i++) {
+//            if (serialNumber.equals(itemList.get(i).getItemSerialNumber())) {
+//                System.out.println(serialNumber);
+//                System.out.println(itemList.get(i).getItemSerialNumber());
+//                errorLabel.setText("Serial number already exists try again");
+//                return;
+//            }
+        for (int i = 0; i < InventoryWrapper.getObservableList().size(); i++) {
+            if (serialNumberToValidate.equals(InventoryWrapper.getObservableList().get(i).getItemSerialNumber())) {
+            errorLabel.setText("Serial number already exists try again");
+                return;
+            }else {
+                continue;
+            }
+        }
+
+        SerialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("ItemSerialNumber"));
+
+
+
+    }
+    @FXML
+    void saveAsHTML(ActionEvent event) throws FileNotFoundException {
+
+        /* <table> </table> table tag signifies that start and end of a table in HTML
+        *  <tr> </tr>     table row tag that represents a row
+        *  <td> </td>     table cell tag that represents a singular cell
+        *
+        * <thead> </thead> table header that we'll use to name the table
+        *
+        *
+        *
+        * make the item name, value and serial number column headers into cells within HTML,
+        * this will signify to the parser where to start taking information from
+        *
+        * */
+
+        InventoryManagementApplication IMA = new InventoryManagementApplication();
+        InventoryWrapper.setObservableList(ItemTable.getItems());
+        ObservableList<Item> inventoryToFile = InventoryWrapper.getObservableList();
+
+
+       File outputFile = IMA.saveFileHTML();
+       PrintWriter pw = new PrintWriter(outputFile);
+        String rowAlign = "\t";
+        String cellAlign = "\t\t";
+
+
+//       if (outputFile.exists()) {
+//           for (Item item : inventoryToFile) {
+//                   /*Initial names of the columns*/
+//                   pw.write("<table>\n" + rowAlign + "<tr>\n" +
+//                           cellAlign + "<td>&nbsp;</td>\n" +
+//                           cellAlign + "<td>ItemName</td>\n" +
+//                           cellAlign + "<td>ItemValue</td>\n" +
+//                           cellAlign + "<td>ItemSerialNumber</td>\n" +
+//                           rowAlign + "</tr>\n"
+//                   );
+//           }
+//       }
+
+
+        //FileChooser filechooser = new FileChooser();
+
+//        try {
+//            PrintWriter pw = new PrintWriter(outputFile);
+//            pw.write("Example");
+//            pw.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+
+        //File html = filechooser.showSaveDialog(new Stage());
+
+//        if (html != null) {
+//            saveSystem(html, "Example");
+//        }
+
+
+
+
+
+//
+//       PrintWriter pw = new PrintWriter(outputFile);
+//       String rowAlign = "\t";
+//       String cellAlign = "\t\t";
+//
+//
+       /*Initial names of the columns*/
+       pw.write("<table>\n" + rowAlign + "<tr>\n" +
+               cellAlign + "<td>&nbsp;</td>\n" +
+               cellAlign + "<td>ItemName</td>\n" +
+               cellAlign + "<td>ItemValue</td>\n" +
+               cellAlign + "<td>ItemSerialNumber</td>\n" +
+               rowAlign + "</tr>\n"
+       );
+//       String html = "<p>text</p>";
+//       File f = new File("\\docs\\test.html");
+//       try {
+//           BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+//           bw.write(html);
+//
+//       }catch (IOException e) {
+//           e.printStackTrace();
+//       }
+
+//
+        int numberOfInventoryItems = inventoryToFile.size();
+        String tableRowToPrint;
+       if (outputFile.exists()) {
+//           for (int i = 0; i < numberOfInventoryItems; i++) {
+//               String itemNumber = "Item number: " + (i+1);
+//               tableRowToPrint = "<tr>\n" + rowAlign + "<td>" + itemNumber + "</td>\n";
+//                tableRowToPrint = tableRowToPrint + cellAlign + "<td>" +
+//                       inventoryToFile.get(i).getItemName() + "</td>\n" + cellAlign +
+//                       inventoryToFile.get(i).getItemPrice() + "</td>\n" + cellAlign +
+//                       inventoryToFile.get(i).getItemSerialNumber() + "</td>\n" + rowAlign +
+//                        "</tr>\n";
+//            pw.write(tableRowToPrint);
+//           }
+           pw.write("</table>");
+           pw.close();
+       }
+
+    }
+//    public void saveSystem(File file, String content) {
+//        try {
+//            PrintWriter pw = new PrintWriter(file);
+//            pw.write(content);
+//            pw.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
+    @FXML
+    void saveAsJSON(ActionEvent event) {
 
     }
 
     @FXML
-    void editSerialNumber(TableColumn.CellEditEvent<Item, String> event) {
+    void saveAsTSV(ActionEvent event) {
 
     }
+
 
 
 

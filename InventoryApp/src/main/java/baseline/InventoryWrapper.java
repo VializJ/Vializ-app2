@@ -24,14 +24,13 @@ public class InventoryWrapper {
         }
 
         public static String deleteItemFromList(Item itemToDelete) {
-            int i = 0;
             String itemToDeleteSerialNumber = "";
-            if (itemList.get(i).equals(itemToDelete)) {
-                //delete
-                itemToDeleteSerialNumber = itemList.get(i).getItemSerialNumber();
-                itemList.remove(i);
-            }else {
-                i++;
+            for (int i = 0; i < itemList.size(); i++) {
+                if (itemList.get(i).equals(itemToDelete)) {
+                    //delete
+                    //itemToDeleteSerialNumber = itemList.get(i).getItemSerialNumber();
+                    itemList.remove(i);
+                }
             }
             return itemToDeleteSerialNumber;
         }
@@ -41,11 +40,14 @@ public class InventoryWrapper {
             itemList = newList;
         }
 
-        public int selectListItem(String itemName) {
+        public int selectListItem(Item itemSelected) {
             int i = 0;
-            if (itemList.get(i).equals(itemName)) {
-                currentSelectedItem = itemList.get(i);
+            for (i = 0; i < itemList.size(); i++) {
+                if (itemList.get(i).equals(itemSelected)) {
+                        currentSelectedItem = itemList.get(i);
+                    }
             }
+
             return i;
             //prompt user to select item using checkbox control
             //return the selected list

@@ -20,9 +20,9 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Save as: TSV" />
-                  <MenuItem mnemonicParsing="false" text="Save as: HTML" />
-                  <MenuItem mnemonicParsing="false" text="Save as: JSON" />
+              <MenuItem fx:id="SaveAsTSVFileOption" mnemonicParsing="false" onAction="#saveAsTSV" text="Save as: TSV" />
+                  <MenuItem fx:id="SaveAsHTMLFileOption" mnemonicParsing="false" onAction="#saveAsHTML" text="Save as: HTML" />
+                  <MenuItem fx:id="SaveAsJSONFileOption" mnemonicParsing="false" onAction="#saveAsJSON" text="Save as: JSON" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
